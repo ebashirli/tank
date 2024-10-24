@@ -1,101 +1,138 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { read, utils } from "xlsx";
+export interface TreeNode {
+  id: string | number;
+  qty: number;
+  part: string;
+  children?: TreeNode[];
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [tree, setTree] = useState<TreeNode[]>([]);
+  function getTree(rows: string[]) {
+    const tree: TreeNode[] = [];
+    rows.forEach((el) => {
+      const id = el[0];
+      const part = el[1];
+      const qty = Number(el[2]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      const [first, second, third, forth] = id.split(".");
+      const firstLevEL = tree.find((r: TreeNode) => r.id === first);
+      if (!firstLevEL) tree.push({ id: first, qty, part });
+      const secondLevEL = firstLevEL?.children?.find((r) => r.id === second);
+
+      if (second) {
+        if (!secondLevEL)
+          firstLevEL!.children = [
+            ...(firstLevEL?.children || []),
+            { id: second, qty, part },
+          ];
+      }
+      const thirdLevEL = secondLevEL?.children?.find((r) => r.id === third);
+      if (third) {
+        if (!thirdLevEL)
+          secondLevEL!.children = [
+            ...(secondLevEL?.children || []),
+            { id: third, qty, part },
+          ];
+      }
+      const forthLevEL = thirdLevEL?.children?.find((r) => r.id === forth);
+      if (forth) {
+        if (!forthLevEL)
+          thirdLevEL!.children = [
+            ...(thirdLevEL?.children || []),
+            { id: forth, qty, part },
+          ];
+      }
+    });
+    setTree(tree);
+  }
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+
+    const data = await file?.arrayBuffer();
+    const workbook = read(data);
+    const worksheet = workbook.Sheets["Sheet1"]; // Adjust the sheet name as needed
+    const rows = utils.sheet_to_json(worksheet, { header: 1 }) as string[];
+    getTree(rows);
+  }
+
+  return (
+    <main className="">
+      {!tree.length ? (
+        <div className="h-screen grid justify-center items-center ">
+          <input
+            type="file"
+            name="file"
+            accept="xlsx"
+            onChange={handleFileChange}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      ) : (
+        <ul className="grid">
+          {tree.map(({ id: id0, part, qty, children: children0 }) => (
+            <li key={id0} className="grid gap-1 h-[280mm] grid-rows-4 ">
+              <span className="grid text-center bg-[#4472c4] rounded-md">
+                <span className="my-auto font-bold ">{`${id0}. (${part}) Qty: ${qty}`}</span>
+              </span>
+              <ul className="grid grid-flow-col gap-1  row-span-3 ">
+                {children0 ? (
+                  children0?.map(
+                    ({ id: id1, part, qty, children: children1 }) => (
+                      <li key={id1} className="grow grid grid-rows-3 gap-1 ">
+                        <span className="grid text-center bg-[#ed7d31] rounded-md">
+                          <span className="m-auto font-bold texto rotate-180 text-[calc(100% * 0.8)] leading-3">{`${id0}.${id1}. (${part}) Qty: ${qty}`}</span>
+                        </span>
+                        <ul className="grid grid-flow-col gap-1 row-span-2">
+                          {children1 ? (
+                            children1.map(
+                              ({ id: id2, part, qty, children: children2 }) => (
+                                <li
+                                  key={id2}
+                                  className="grow grid gap-1 grid-rows-2 "
+                                >
+                                  <span className="grid text-center bg-[#a5a5a5] rounded-md">
+                                    <span className="m-auto font-bold texto rotate-180 text-[calc(100% * 0.8)] leading-3">{`${id0}.${id1}.${id2}. (${part}) Qty: ${qty}`}</span>
+                                  </span>
+                                  <ul className="grid grid-flow-col gap-[2px]">
+                                    {children2 ? (
+                                      children2.map(
+                                        ({ id: id3, part, qty }) => (
+                                          <li
+                                            key={id2}
+                                            className="grow grid gap-1"
+                                          >
+                                            <span className="grid text-center bg-[#ffc000] rounded-md">
+                                              <span className="m-auto font-bold texto rotate-180 text-[calc(100% * 0.8)] leading-3 ">{`${id0}.${id1}.${id2}.${id3}. (${part}) Qty: ${qty}`}</span>
+                                            </span>
+                                          </li>
+                                        )
+                                      )
+                                    ) : (
+                                      <span className="h-24" />
+                                    )}
+                                  </ul>
+                                </li>
+                              )
+                            )
+                          ) : (
+                            <span className="h-24" />
+                          )}
+                        </ul>
+                      </li>
+                    )
+                  )
+                ) : (
+                  <span className="h-24" />
+                )}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
   );
 }
