@@ -102,7 +102,7 @@ export default function Home() {
                                       children2.map(
                                         ({ id: id3, part, qty }) => (
                                           <li
-                                            key={id2}
+                                            key={id3}
                                             className="grow grid gap-1"
                                           >
                                             <span className="grid text-center bg-[#ffc000] max-h-64 rounded-md">
