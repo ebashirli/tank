@@ -83,8 +83,8 @@ export default function Home() {
                   children0?.map(
                     ({ id: id1, part, qty, children: children1 }) => (
                       <li key={id1} className="grow grid grid-rows-3 gap-1 ">
-                        <span className="grid text-center bg-[#ed7d31] rounded-md">
-                          <span className="m-auto font-bold texto rotate-180 text-[calc(100% * 0.8)] leading-3">{`${id0}.${id1}. (${part}) Qty: ${qty}`}</span>
+                        <span className="grid text-center bg-[#ed7d31] max-h-64 rounded-md">
+                          <span className="m-auto font-bold texto text-xs leading-3 text-nowrap">{`${id0}.${id1}. (${part}) Qty: ${qty}`}</span>
                         </span>
                         <ul className="grid grid-flow-col gap-1 row-span-2">
                           {children1 ? (
@@ -94,8 +94,8 @@ export default function Home() {
                                   key={id2}
                                   className="grow grid gap-1 grid-rows-2 "
                                 >
-                                  <span className="grid text-center bg-[#a5a5a5] rounded-md">
-                                    <span className="m-auto font-bold texto rotate-180 text-[calc(100% * 0.8)] leading-3">{`${id0}.${id1}.${id2}. (${part}) Qty: ${qty}`}</span>
+                                  <span className="grid text-center bg-[#a5a5a5] max-h-64 rounded-md">
+                                    <span className="m-auto font-bold texto text-xs leading-3 text-nowrap ">{`${id0}.${id1}.${id2}. (${part}) Qty: ${qty}`}</span>
                                   </span>
                                   <ul className="grid grid-flow-col gap-[2px]">
                                     {children2 ? (
@@ -105,8 +105,8 @@ export default function Home() {
                                             key={id2}
                                             className="grow grid gap-1"
                                           >
-                                            <span className="grid text-center bg-[#ffc000] rounded-md">
-                                              <span className="m-auto font-bold texto rotate-180 text-[calc(100% * 0.8)] leading-3 ">{`${id0}.${id1}.${id2}.${id3}. (${part}) Qty: ${qty}`}</span>
+                                            <span className="grid text-center bg-[#ffc000] max-h-64 rounded-md">
+                                              <span className="m-auto font-bold texto text-xs leading-3 text-nowrap ">{`${id0}.${id1}.${id2}.${id3}. (${part}) Qty: ${qty}`}</span>
                                             </span>
                                           </li>
                                         )
