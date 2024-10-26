@@ -150,7 +150,7 @@ export default function Home() {
                                                                 className="grow grid gap-1 grid-rows-[280px_1fr] 4"
                                                               >
                                                                 <span className="grid text-center bg-[#d322d3] rounded-md">
-                                                                  <span className="m-auto font-bold texto text-xs leading-3 text-nowrap ">{`${id0}.${id1}.${id2}.${id3}.${id3}. (${part}) Qty: ${qty}`}</span>
+                                                                  <span className="m-auto font-bold texto text-xs leading-3 text-nowrap ">{`${id0}.${id1}.${id2}.${id3}.${id4}. (${part}) Qty: ${qty}`}</span>
                                                                 </span>
                                                               </li>
                                                             );
