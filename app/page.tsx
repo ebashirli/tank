@@ -18,7 +18,7 @@ export default function Home() {
       const part = el[1];
       const qty = Number(el[2]);
 
-      const [first, second, third, forth] = id.split(".");
+      const [first, second, third, forth, fifth] = id.split(".");
       const firstLevEL = tree.find((r: TreeNode) => r.id === first);
       if (!firstLevEL) tree.push({ id: first, qty, part });
       const secondLevEL = firstLevEL?.children?.find((r) => r.id === second);
@@ -44,6 +44,14 @@ export default function Home() {
           thirdLevEL!.children = [
             ...(thirdLevEL?.children || []),
             { id: forth, qty, part },
+          ];
+      }
+      const fifthLevEL = forthLevEL?.children?.find((r) => r.id === fifth);
+      if (fifth) {
+        if (!fifthLevEL)
+          forthLevEL!.children = [
+            ...(forthLevEL?.children || []),
+            { id: fifth, qty, part },
           ];
       }
     });
@@ -73,64 +81,112 @@ export default function Home() {
         </div>
       ) : (
         <ul className="grid">
-          {tree.map(({ id: id0, part, qty, children: children0 }) => (
-            <li key={id0} className="grid gap-1 h-[280mm] grid-rows-4 ">
-              <span className="grid text-center bg-[#4472c4] rounded-md">
-                <span className="my-auto font-bold ">{`${id0}. (${part}) Qty: ${qty}`}</span>
-              </span>
-              <ul className="grid grid-flow-col gap-1  row-span-3 ">
-                {children0 ? (
-                  children0?.map(
-                    ({ id: id1, part, qty, children: children1 }) => (
-                      <li key={id1} className="grow grid grid-rows-3 gap-1 ">
-                        <span className="grid text-center bg-[#ed7d31] max-h-64 rounded-md">
-                          <span className="m-auto font-bold texto text-xs leading-3 text-nowrap">{`${id0}.${id1}. (${part}) Qty: ${qty}`}</span>
-                        </span>
-                        <ul className="grid grid-flow-col gap-1 row-span-2">
-                          {children1 ? (
-                            children1.map(
-                              ({ id: id2, part, qty, children: children2 }) => (
-                                <li
-                                  key={id2}
-                                  className="grow grid gap-1 grid-rows-2 "
-                                >
-                                  <span className="grid text-center bg-[#a5a5a5] max-h-64 rounded-md">
-                                    <span className="m-auto font-bold texto text-xs leading-3 text-nowrap ">{`${id0}.${id1}.${id2}. (${part}) Qty: ${qty}`}</span>
-                                  </span>
-                                  <ul className="grid grid-flow-col gap-[2px]">
-                                    {children2 ? (
-                                      children2.map(
-                                        ({ id: id3, part, qty }) => (
-                                          <li
-                                            key={id3}
-                                            className="grow grid gap-1"
-                                          >
-                                            <span className="grid text-center bg-[#ffc000] max-h-64 rounded-md">
-                                              <span className="m-auto font-bold texto text-xs leading-3 text-nowrap ">{`${id0}.${id1}.${id2}.${id3}. (${part}) Qty: ${qty}`}</span>
-                                            </span>
-                                          </li>
-                                        )
-                                      )
-                                    ) : (
-                                      <span className="h-24" />
-                                    )}
-                                  </ul>
-                                </li>
-                              )
-                            )
-                          ) : (
-                            <span className="h-24" />
-                          )}
-                        </ul>
-                      </li>
+          {tree.map(({ id: id0, part, qty, children: children0 }) => {
+            return (
+              <li
+                key={id0}
+                className="grid gap-1 h-[280mm] grid-rows-[40px_1fr] 0 "
+              >
+                <span className="grid text-center bg-[#4472c4] rounded-md">
+                  <span className="my-auto font-bold ">{`${id0}. (${part}) Qty: ${qty}`}</span>
+                </span>
+                <ul className="grid grid-flow-col gap-1 ">
+                  {children0 ? (
+                    children0?.map(
+                      ({ id: id1, part, qty, children: children1 }) => {
+                        return (
+                          <li
+                            key={id1}
+                            className="grow grid grid-rows-[220px_1fr] gap-1 1"
+                          >
+                            <span className="grid text-center bg-[#ed7d31] rounded-md">
+                              <span className="m-auto font-bold texto text-xs leading-3 text-wrap">{`${id0}.${id1}. (${part}) Qty: ${qty}`}</span>
+                            </span>
+                            <ul className="grid grid-flow-col gap-1">
+                              {children1 ? (
+                                children1.map(
+                                  ({
+                                    id: id2,
+                                    part,
+                                    qty,
+                                    children: children2,
+                                  }) => {
+                                    return (
+                                      <li
+                                        key={id2}
+                                        className="grow grid gap-1 grid-rows-[280px_1fr] 2"
+                                      >
+                                        <span className="grid text-center bg-[#a5a5a5] rounded-md ">
+                                          <span className="m-auto font-bold texto text-xs leading-3 text-wrap ">{`${id0}.${id1}.${id2}. (${part}) Qty: ${qty}`}</span>
+                                        </span>
+                                        <ul className="grid grid-flow-col gap-[2px]">
+                                          {children2 ? (
+                                            children2.map(
+                                              ({
+                                                id: id3,
+                                                part,
+                                                qty,
+                                                children: children3,
+                                              }) => {
+                                                return (
+                                                  <li
+                                                    key={id3}
+                                                    className="grow grid gap-1 grid-rows-[200px_1fr] 3"
+                                                  >
+                                                    <span className="grid text-center bg-[#ffc000] rounded-md">
+                                                      <span className="m-auto font-bold texto text-[9px] leading-3 text-nowrap ">{`${id0}.${id1}.${id2}.${id3}. (${part}) Qty: ${qty}`}</span>
+                                                    </span>
+                                                    <ul className="grid grid-flow-col gap-[2px]">
+                                                      {children3 ? (
+                                                        children3.map(
+                                                          ({
+                                                            id: id4,
+                                                            part,
+                                                            qty,
+                                                          }) => {
+                                                            return (
+                                                              <li
+                                                                key={id4}
+                                                                className="grow grid gap-1 grid-rows-[280px_1fr] 4"
+                                                              >
+                                                                <span className="grid text-center bg-[#d322d3] rounded-md">
+                                                                  <span className="m-auto font-bold texto text-xs leading-3 text-nowrap ">{`${id0}.${id1}.${id2}.${id3}.${id3}. (${part}) Qty: ${qty}`}</span>
+                                                                </span>
+                                                              </li>
+                                                            );
+                                                          }
+                                                        )
+                                                      ) : (
+                                                        <span className="h-24" />
+                                                      )}
+                                                    </ul>
+                                                  </li>
+                                                );
+                                              }
+                                            )
+                                          ) : (
+                                            <span className="h-24" />
+                                          )}
+                                        </ul>
+                                      </li>
+                                    );
+                                  }
+                                )
+                              ) : (
+                                <span className="h-24" />
+                              )}
+                            </ul>
+                          </li>
+                        );
+                      }
                     )
-                  )
-                ) : (
-                  <span className="h-24" />
-                )}
-              </ul>
-            </li>
-          ))}
+                  ) : (
+                    <span className="h-24" />
+                  )}
+                </ul>
+              </li>
+            );
+          })}
         </ul>
       )}
     </main>
