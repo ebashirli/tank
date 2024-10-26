@@ -85,7 +85,7 @@ export default function Home() {
             return (
               <li
                 key={id0}
-                className="grid gap-1 h-[280mm] grid-rows-[40px_1fr] 0 "
+                className="grid gap-1 h-screen grid-rows-[40px_1fr] 0 "
               >
                 <span className="grid text-center bg-[#4472c4] rounded-md">
                   <span className="my-auto font-bold ">{`${id0}. (${part}) Qty: ${qty}`}</span>
