@@ -65,7 +65,7 @@ export default function Home() {
     const workbook = read(data);
     const worksheet = workbook.Sheets["Sheet1"]; // Adjust the sheet name as needed
     const rows = utils.sheet_to_json(worksheet, { header: 1 }) as string[];
-    getTree(rows);
+    getTree(rows.filter((el) => el.length));
   }
 
   return (
